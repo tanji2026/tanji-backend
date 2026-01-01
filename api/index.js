@@ -22,7 +22,8 @@ app.get('/api/weather', async (req, res) => {
         }
 
         // 呼叫中央氣象署 API (O-A0001-001 自動氣象站資料)
-        const apiUrl = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=${CWA_API_KEY}&limit=10&format=JSON`;
+        // 移除 limit 限制，抓取全台測站以便搜尋
+        const apiUrl = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=${CWA_API_KEY}&format=JSON`;
         
         const response = await fetch(apiUrl);
         const data = await response.json();
