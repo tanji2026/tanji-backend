@@ -30,7 +30,6 @@ app.get('/api/geocode', async (req, res) => {
             res.status(404).json({ error: 'Address not found' });
         }
     } catch (error) {
-        console.error('Geocode error:', error);
         res.status(500).json({ error: 'Geocoding failed' });
     }
 });
@@ -45,8 +44,21 @@ app.get('/api/weather', async (req, res) => {
         const data = await response.json();
         res.json(data);
     } catch (error) {
-        console.error('Fetch error:', error);
         res.status(500).json({ error: 'Failed to fetch weather data' });
+    }
+});
+
+app.get('/api/rain', async (req, res) => {
+    try {
+        const CWA_API_KEY = process.env.CWA_API_KEY;
+        if (!CWA_API_KEY) return res.status(500).json({ error: 'Server missing API Key configuration' });
+
+        const apiUrl = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0002-001?Authorization=${CWA_API_KEY}&format=JSON&RainfallElement=Past1hr`;
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch rain data' });
     }
 });
 
